@@ -38,6 +38,8 @@ public class QPartida extends EntityPathBase<Partida> {
 
     public final NumberPath<Integer> premiolinea = createNumber("premiolinea", Integer.class);
 
+    public final DateTimePath<java.util.Date> timestamp = createDateTime("timestamp", java.util.Date.class);
+
     public QPartida(String variable) {
         this(Partida.class, forVariable(variable), INITS);
     }
