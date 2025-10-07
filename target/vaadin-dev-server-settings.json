@@ -1,0 +1,18 @@
+{
+  "frontendFolder": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/./frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/./frontend/generated/jar-resources",
+  "staticOutput": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "statsOutput": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/target/classes/META-INF/VAADIN/config",
+  "frontendBundleOutput": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/target/classes/META-INF/VAADIN/webapp",
+  "devBundleOutput": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/target/dev-bundle/webapp",
+  "devBundleStatsOutput": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/target/dev-bundle/config",
+  "i18nOutput": "target/classes/vaadin-i18n",
+  "jarResourcesFolder": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/./frontend/generated/jar-resources",
+  "themeName": "",
+  "clientServiceWorkerSource": "/home/lmartinh/Documents/workspace-spring-tool-suite-4-4.21.1.RELEASE/BHernandez/target/sw.ts",
+  "pwaEnabled": true,
+  "offlineEnabled": true,
+  "offlinePath": "'.'"
+}

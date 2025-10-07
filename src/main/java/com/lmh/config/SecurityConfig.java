@@ -3,7 +3,6 @@ package com.lmh.config;
 import java.util.Date;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,7 +20,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import com.lmh.entity.QUsuario;
 import com.lmh.entity.Usuario;
 import com.lmh.service.IUsuarioService;
-import com.lmh.service.impl.MyUserDetailsService;
 import com.lmh.utils.BeanFactory;
 import com.lmh.view.LoginView;
 import com.querydsl.core.types.Predicate;
@@ -44,9 +42,6 @@ public class SecurityConfig {
 	private static final String LOGIN_SUCCESS_URL = "/salas";
 	private static final String LOGIN_URL = "/login";
 	private static final String LOGOUT_SUCCESS_URL = "/login";
-    
-	@Autowired
-	private MyUserDetailsService userDetailsService;
 	
 	private IUsuarioService usuarioService;
 
