@@ -31,6 +31,8 @@ public class Usuario {
 	private String salt;
 	
 	private Date fechaultimoacceso;
+	
+	private boolean activo = true;
 
 	@Version
 	@CurrentTimestamp
@@ -83,6 +85,14 @@ public class Usuario {
 
 	public void setFechaultimoacceso(Date fechaultimoacceso) {
 		this.fechaultimoacceso = fechaultimoacceso;
+	}
+
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
 	}
 
 	public Date getTimestamp() {

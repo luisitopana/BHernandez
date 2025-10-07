@@ -6,16 +6,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.lmh.entity.QUsuario;
 import com.lmh.entity.Usuario;
 import com.lmh.service.IUsuarioService;
+import com.lmh.service.impl.UserDetailsServiceImpl;
 import com.lmh.utils.BeanFactory;
 import com.lmh.view.LoginView;
 import com.querydsl.core.types.Predicate;
@@ -41,44 +46,28 @@ public class SecurityConfig {
 
 	private IUsuarioService usuarioService;
 
-	/*
-	 * @Bean public SecurityFilterChain vaadinSecurity(HttpSecurity http) throws
-	 * Exception { http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
-	 * configurer.loginView(LoginView.class); }); return http.build(); }
-	 */
-
-	/*
-	 * public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
-	 * Exception { /*http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
-	 * configurer.loginView(LoginView.class); });
-	 * 
-	 * http .csrf(csrf -> csrf.disable()) // O configura CSRF para WebSocket si
-	 * aplica .authorizeHttpRequests(auth -> auth
-	 * .requestMatchers("/ws-bingo/**").permitAll()
-	 * .requestMatchers("/api/admin/**").hasRole("ADMIN") .anyRequest().permitAll()
-	 * // <- SIEMPRE AL FINAL ).formLogin() .loginPage(("/login")).permitAll()
-	 * .loginProcessingUrl("/login") .defaultSuccessUrl("/");
-	 * 
-	 * 
-	 * return http.build();
-	 */
-
-	/*
-	 * http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
-	 * configurer.loginView(LoginView.class); });
-	 */
-
-	// Configuración general
-	/*
-	 * http .csrf(csrf -> csrf.disable()) // WebSockets no usan CSRF tokens
-	 * .authorizeHttpRequests(auth -> auth
-	 * .requestMatchers("/ws-bingo/**").permitAll()
-	 * .requestMatchers("/api/admin/**").hasRole("ADMIN") .anyRequest().permitAll()
-	 * // <- SIEMPRE AL FINAL ) .formLogin(form -> form .loginPage("/login")
-	 * .permitAll() .loginProcessingUrl("/login") .defaultSuccessUrl("/") );
-	 * 
-	 * return http.build(); }
-	 */
+	@Bean
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsServiceImpl();
+    }
+     
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+     
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+         
+        return authProvider;
+    }
+ 
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
+    }
 
 	@Bean
 	@Order(1)
@@ -119,28 +108,16 @@ public class SecurityConfig {
 				}).defaultSuccessUrl(LOGIN_SUCCESS_URL, true).failureUrl(LOGIN_FAILURE_URL)).logout(logout -> logout.logoutSuccessUrl(LOGOUT_SUCCESS_URL));
 		return http.build();
 	}
+	
+	/*@Bean
+	public UserDetailsService userDetailsService() {
+		UserDetails user =
+			 User.withDefaultPasswordEncoder()
+				.username("user")
+				.password("password")
+				.roles("USER")
+				.build();
 
-	/*
-	 * @Bean public UserDetailsManager userDetailsManager() {
-	 * LoggerFactory.getLogger(SecurityConfig.class)
-	 * .warn("NOT FOR PRODUCTION: Using in-memory user details manager!"); var user
-	 * = User.withUsername("user") .password("{noop}user") .roles("USER") .build();
-	 * var admin = User.withUsername("admin") .password("{noop}admin")
-	 * .roles("ADMIN") .build(); return new InMemoryUserDetailsManager(user, admin);
-	 * }
-	 */
-
-	/*
-	 * public UserDetails loadUserByUsername(String username) throws
-	 * UsernameNotFoundException { User user =
-	 * repo.findById(username).orElseThrow(() -> new
-	 * UsernameNotFoundException(username));
-	 * 
-	 * String role = user.getUsername() == "admin" ? "ROLE_ADMIN" : "ROLE_USER";
-	 * 
-	 * List<GrantedAuthority> authorities = List.of(new
-	 * SimpleGrantedAuthority(role)); return new
-	 * org.springframework.security.core.userdetails.User(user.getUsername(),
-	 * user.getPassword(), user.isEnabled(), true, true, true, authorities); }
-	 */
+		return new InMemoryUserDetailsManager(user);
+	}*/	
 }

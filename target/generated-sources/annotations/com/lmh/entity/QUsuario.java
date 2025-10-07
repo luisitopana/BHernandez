@@ -19,6 +19,8 @@ public class QUsuario extends EntityPathBase<Usuario> {
 
     public static final QUsuario usuario = new QUsuario("usuario");
 
+    public final BooleanPath activo = createBoolean("activo");
+
     public final DateTimePath<java.util.Date> fechaultimoacceso = createDateTime("fechaultimoacceso", java.util.Date.class);
 
     public final NumberPath<Integer> idusuario = createNumber("idusuario", Integer.class);
