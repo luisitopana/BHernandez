@@ -36,13 +36,13 @@ import jakarta.servlet.http.HttpServletResponse;
 @Configuration
 @Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class) 
 public class SecurityConfig {
-	
+
 	private static final String LOGIN_PROCESSING_URL = "/login";
 	private static final String LOGIN_FAILURE_URL = "/login?error";
 	private static final String LOGIN_SUCCESS_URL = "/salas";
 	private static final String LOGIN_URL = "/login";
 	private static final String LOGOUT_SUCCESS_URL = "/login";
-	
+
 	private IUsuarioService usuarioService;
 
 	/*@Bean
@@ -52,12 +52,12 @@ public class SecurityConfig {
         });
         return http.build();
     }*/
-    
-    /*public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+	/*public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	/*http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
             configurer.loginView(LoginView.class);
         });
-    	
+
     	http
         .csrf(csrf -> csrf.disable()) // O configura CSRF para WebSocket si aplica
         .authorizeHttpRequests(auth -> auth
@@ -68,16 +68,16 @@ public class SecurityConfig {
         .loginPage(("/login")).permitAll()
         .loginProcessingUrl("/login")
         .defaultSuccessUrl("/");
-    	
-    	
+
+
         return http.build();*/
-    	
-    	/*http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
+
+	/*http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
             configurer.loginView(LoginView.class);
         });*/
 
-        // Configuración general
-        /*http
+	// Configuración general
+	/*http
             .csrf(csrf -> csrf.disable()) // WebSockets no usan CSRF tokens
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/ws-bingo/**").permitAll()
@@ -93,77 +93,78 @@ public class SecurityConfig {
 
         return http.build();
     }*/
-	
+
 	@Bean
-    @Order(1)
-    public SecurityFilterChain vaadinSecurity(HttpSecurity http) throws Exception {
-        http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
-            configurer.loginView(LoginView.class);
-        });
-        return http.build();
-    }
+	@Order(1)
+	public SecurityFilterChain vaadinSecurity(HttpSecurity http) throws Exception {
+		http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
+			configurer.loginView(LoginView.class);
+		});
+		return http.build();
+	}
 
-    @Bean
-    @Order(0)
-    public SecurityFilterChain appSecurity(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/api/**", "/ws-bingo/**") // solo endpoints REST + WebSocket
-                .csrf(csrf -> csrf.disable())
-                .headers().frameOptions().disable()
-                .and()
-                .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/ws-bingo/**").permitAll()  // WebSocket abierto
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/h2-console/**").permitAll()
-                                .anyRequest().authenticated()                  // resto de API requiere login
-                )
-                .formLogin(login -> login
-                        .loginPage(LOGIN_URL).permitAll()
-                        .loginProcessingUrl(LOGIN_PROCESSING_URL)
-                        .successHandler(new AuthenticationSuccessHandler() {
-                            @Override
-                            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                                    Authentication authentication) throws IOException, ServletException, java.io.IOException {
-                                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                                String username = userDetails.getUsername();
+	@Bean
+	@Order(0)
+	public SecurityFilterChain appSecurity(HttpSecurity http) throws Exception {
+		http
+		.securityMatcher("/api/**", "/ws-bingo/**") // solo endpoints REST + WebSocket
+		.csrf(csrf -> csrf.disable())
+		.headers().frameOptions().disable()
+		.and()
+		.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/h2-console/**").permitAll()
+				.requestMatchers("/ws-bingo/**").permitAll()  // WebSocket abierto
+				.requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                                usuarioService = Option.of(usuarioService).getOrElse(BeanFactory.getBean(IUsuarioService.class));
+				.anyRequest().authenticated()                  // resto de API requiere login
+				)
+		.formLogin(login -> login
+				.loginPage(LOGIN_URL).permitAll()
+				.loginProcessingUrl(LOGIN_PROCESSING_URL)
+				.successHandler(new AuthenticationSuccessHandler() {
+					@Override
+					public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+							Authentication authentication) throws IOException, ServletException, java.io.IOException {
+						UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+						String username = userDetails.getUsername();
 
-                                Predicate p = QUsuario.usuario.nombreusuario.eq(username);
+						usuarioService = Option.of(usuarioService).getOrElse(BeanFactory.getBean(IUsuarioService.class));
 
-                                Usuario u = usuarioService.search(p).get(0);
-                                u.setFechaultimoacceso(new Date());
-                                u = usuarioService.save(u);
+						Predicate p = QUsuario.usuario.nombreusuario.eq(username);
 
-                                System.out.println("El usuario " + username + " ha iniciado sesión.");
-                                response.sendRedirect(LOGIN_SUCCESS_URL);
-                            }
-                        })
-                        .defaultSuccessUrl(LOGIN_SUCCESS_URL, true)
-                        .failureUrl(LOGIN_FAILURE_URL)).logout(logout -> logout.logoutSuccessUrl(LOGOUT_SUCCESS_URL));
-        return http.build();
-    }
+						Usuario u = usuarioService.search(p).get(0);
+						u.setFechaultimoacceso(new Date());
+						u = usuarioService.save(u);
 
-    @Bean
-    public UserDetailsManager userDetailsManager() {
-        LoggerFactory.getLogger(SecurityConfig.class)
-            .warn("NOT FOR PRODUCTION: Using in-memory user details manager!"); 
-        var user = User.withUsername("user")
-                .password("{noop}user")
-                .roles("USER")
-                .build();
-        var admin = User.withUsername("admin")
-                .password("{noop}admin")
-                .roles("ADMIN")
-                .build();
-       return new InMemoryUserDetailsManager(user, admin);
-    }
-    
-    /*public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+						System.out.println("El usuario " + username + " ha iniciado sesión.");
+						response.sendRedirect(LOGIN_SUCCESS_URL);
+					}
+				})
+				.defaultSuccessUrl(LOGIN_SUCCESS_URL, true)
+				.failureUrl(LOGIN_FAILURE_URL)).logout(logout -> logout.logoutSuccessUrl(LOGOUT_SUCCESS_URL));
+		return http.build();
+	}
+
+	@Bean
+	public UserDetailsManager userDetailsManager() {
+		LoggerFactory.getLogger(SecurityConfig.class)
+		.warn("NOT FOR PRODUCTION: Using in-memory user details manager!"); 
+		var user = User.withUsername("user")
+				.password("{noop}user")
+				.roles("USER")
+				.build();
+		var admin = User.withUsername("admin")
+				.password("{noop}admin")
+				.roles("ADMIN")
+				.build();
+		return new InMemoryUserDetailsManager(user, admin);
+	}
+
+	/*public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = repo.findById(username).orElseThrow(() -> new UsernameNotFoundException(username));
-        
+
         String role = user.getUsername() == "admin" ? "ROLE_ADMIN" : "ROLE_USER";
-        
+
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(),
             true, true, true, authorities);
