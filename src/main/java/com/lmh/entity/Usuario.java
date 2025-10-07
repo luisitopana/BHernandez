@@ -15,7 +15,7 @@ import jakarta.persistence.TemporalType;
 import jakarta.persistence.Version;
 
 @Entity
-@Table(name = "JUGADOR")
+@Table(name = "USUARIO")
 public class Usuario {
 
 	@Id 

@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -17,14 +18,15 @@ import jakarta.persistence.TemporalType;
 import jakarta.persistence.Version;
 
 @Entity
-@Table(name = "BOLA_EXTRAIDA")
+@Table(name = "BOLAEXTRAIDA")
 public class Bolaextraida {
 
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer idbola;
+	private Integer idbolaextraida;
 	
 	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "idpartida")
 	private Partida idpartida;
 	
 	private Integer numerobola;
@@ -36,12 +38,12 @@ public class Bolaextraida {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 
-	public Integer getIdbola() {
-		return idbola;
+	public Integer getIdbolaextraida() {
+		return idbolaextraida;
 	}
 
-	public void setIdbola(Integer idbola) {
-		this.idbola = idbola;
+	public void setIdbolaextraida(Integer idbolaextraida) {
+		this.idbolaextraida = idbolaextraida;
 	}
 
 	public Partida getIdpartida() {

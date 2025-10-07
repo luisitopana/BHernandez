@@ -33,6 +33,8 @@ public class Sala {
 	
 	private Integer porcentajebote;
 	
+	private Integer bolamaxbote = 44;
+	
 	@Version
 	@CurrentTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
@@ -92,6 +94,22 @@ public class Sala {
 
 	public void setPorcentajebote(Integer porcentajebote) {
 		this.porcentajebote = porcentajebote;
+	}
+
+	public Integer getBolamaxbote() {
+		return bolamaxbote;
+	}
+
+	public void setBolamaxbote(Integer bolamaxbote) {
+		this.bolamaxbote = bolamaxbote;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	

@@ -22,7 +22,7 @@ public class QBolaextraida extends EntityPathBase<Bolaextraida> {
 
     public static final QBolaextraida bolaextraida = new QBolaextraida("bolaextraida");
 
-    public final NumberPath<Integer> idbola = createNumber("idbola", Integer.class);
+    public final NumberPath<Integer> idbolaextraida = createNumber("idbolaextraida", Integer.class);
 
     public final QPartida idpartida;
 

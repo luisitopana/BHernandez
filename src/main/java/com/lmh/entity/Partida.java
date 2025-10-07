@@ -7,11 +7,13 @@ import org.hibernate.annotations.CurrentTimestamp;
 import com.lmh.manager.PartidaState;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -24,26 +26,38 @@ public class Partida {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idpartida")
 	private Integer idpartida;
 
 	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "idsala")
 	private Sala idsala;
 
+	@Column(name = "fechainicio")
 	private Date fechainicio;
 
+	@Column(name = "fechafin")
 	private Date fechafin;
 
+	@Column(name = "premiolinea")
 	private Integer premiolinea;
 
+	@Column(name = "premiobingo")
 	private Integer premiobingo;
 
+	@Column(name = "premiobote")
 	private Integer premiobote;
 
+	@Column(name = "estado")
 	private PartidaState estado;
+	
+	@Column(name = "saliobote")
+	private boolean saliobote;
 
 	@Version
 	@CurrentTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "timestamp")
 	private Date timestamp;
 
 	public Integer getIdpartida() {
@@ -108,6 +122,14 @@ public class Partida {
 
 	public void setEstado(PartidaState estado) {
 		this.estado = estado;
+	}
+
+	public boolean isSaliobote() {
+		return saliobote;
+	}
+
+	public void setSaliobote(boolean saliobote) {
+		this.saliobote = saliobote;
 	}
 
 	public Date getTimestamp() {

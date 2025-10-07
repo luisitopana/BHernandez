@@ -19,6 +19,8 @@ public class QSala extends EntityPathBase<Sala> {
 
     public static final QSala sala = new QSala("sala");
 
+    public final NumberPath<Integer> bolamaxbote = createNumber("bolamaxbote", Integer.class);
+
     public final StringPath codigo = createString("codigo");
 
     public final NumberPath<Integer> idsala = createNumber("idsala", Integer.class);
