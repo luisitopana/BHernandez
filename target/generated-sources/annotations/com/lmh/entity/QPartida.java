@@ -34,8 +34,6 @@ public class QPartida extends EntityPathBase<Partida> {
 
     public final NumberPath<Integer> premiobingo = createNumber("premiobingo", Integer.class);
 
-    public final NumberPath<Integer> premiobote = createNumber("premiobote", Integer.class);
-
     public final NumberPath<Integer> premiolinea = createNumber("premiolinea", Integer.class);
 
     public final BooleanPath saliobote = createBoolean("saliobote");

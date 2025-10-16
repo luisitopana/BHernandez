@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -23,7 +24,8 @@ import jakarta.persistence.Version;
 public class Historial {
 
 	@Id 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "historial_seq")
+	@SequenceGenerator(name="historial_seq", sequenceName = "seq_historial", allocationSize=1)
 	private Integer idhistorial;
 	
 	private BigDecimal cantidadactual;

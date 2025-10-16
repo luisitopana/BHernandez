@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -23,7 +24,8 @@ import jakarta.validation.constraints.Size;
 public class Carton {
 
 	@Id 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "carton_seq")
+	@SequenceGenerator(name="carton_seq", sequenceName = "seq_carton", allocationSize=1)
 	private Integer idcarton;
 	
 	@Size(min = 15, max = 4000)

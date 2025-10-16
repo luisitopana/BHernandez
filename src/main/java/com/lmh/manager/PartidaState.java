@@ -4,5 +4,6 @@ public enum PartidaState {
 	INICIANDO,
     JUGANDO,
     COMPROBARLINEA,
-    COMPROBARBINGO
+    COMPROBARBINGO,
+    FINALIZADA
 }

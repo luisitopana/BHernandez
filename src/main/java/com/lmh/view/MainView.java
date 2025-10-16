@@ -59,6 +59,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 			securityService.logout();
 		});
 
+		logout.getStyle().set("margin-right", "20px");
 		logout.setWidth("20px");
 		
 		addToNavbar(header); 

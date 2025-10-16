@@ -11,4 +11,6 @@ import com.lmh.service.ISalaService;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class SalaServiceImpl extends BaseServiceImpl<Sala, ISalaRepository> implements ISalaService {
+	
+	
 }

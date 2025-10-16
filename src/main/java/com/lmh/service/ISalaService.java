@@ -4,4 +4,5 @@ import com.lmh.entity.Sala;
 
 public interface ISalaService extends IBaseService<Sala> {
 
+	
 }

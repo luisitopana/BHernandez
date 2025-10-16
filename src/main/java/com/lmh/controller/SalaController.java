@@ -1,48 +1,32 @@
 package com.lmh.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.lmh.manager.SalaManager;
-import com.lmh.service.ISalaService;
+import com.lmh.service.IPatroncartonService;
 import com.lmh.utils.BeanFactory;
 
 import io.vavr.control.Option;
 
-@Controller
+@RestController
+@RequestMapping("/api/bingo")
 public class SalaController {
 
-	private ISalaService salaService;
+	private IPatroncartonService patroncartonService;
 
-	@Autowired
-	private SalaManager salaManager;
-
-	/*@MessageMapping("/join/{roomId}")
-    @SendTo("/topic/room/{roomId}")
-    public Player joinRoom(@DestinationVariable String roomId, Player player) {
-        // Añadir jugador a la sala
-        return player;
-    }*/
-
-    @MessageMapping("/draw/{roomId}")
-    @SendTo("/topic/room/{roomId}")	
-    public Integer drawNumber(@DestinationVariable String roomId) {
-        // Lógica para sacar número aleatorio
-        return 1;
-    }
-    
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public String greeting() throws Exception {
-      Thread.sleep(1000); // simulated delay
-      return "HOLA";
+	@RequestMapping(method = RequestMethod.GET, value = "/comprar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity comprarCartones(@RequestParam int userId, @RequestParam int cantidad, @RequestParam int idpartida) {
+        String cartones = getPatroncartonService().generarCartones(userId, cantidad, idpartida);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(cartones);
     }
 
-	private ISalaService getSalaService() {
-		salaService = Option.of(salaService).getOrElse(BeanFactory.getBean(ISalaService.class));
-		return salaService;
+	private IPatroncartonService getPatroncartonService() {
+		patroncartonService = Option.of(patroncartonService).getOrElse(BeanFactory.getBean(IPatroncartonService.class));
+		return patroncartonService;
 	}
 }

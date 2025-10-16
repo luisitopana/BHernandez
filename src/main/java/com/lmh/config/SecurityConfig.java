@@ -1,37 +1,24 @@
 package com.lmh.config;
 
-import java.util.Date;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.lmh.entity.QUsuario;
-import com.lmh.entity.Usuario;
 import com.lmh.service.IUsuarioService;
 import com.lmh.service.impl.UserDetailsServiceImpl;
-import com.lmh.utils.BeanFactory;
 import com.lmh.view.LoginView;
-import com.querydsl.core.types.Predicate;
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
-
-import io.jsonwebtoken.io.IOException;
-import io.vavr.control.Option;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @Configuration
@@ -68,6 +55,11 @@ public class SecurityConfig {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
+    
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
 	@Bean
 	@Order(1)
@@ -75,37 +67,21 @@ public class SecurityConfig {
 		http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
 			configurer.loginView(LoginView.class);
 		});
+
+        http.formLogin(login -> login.defaultSuccessUrl("/salas", true));
 		return http.build();
 	}
 
 	@Bean
 	@Order(0)
 	public SecurityFilterChain appSecurity(HttpSecurity http) throws Exception {
-		http.securityMatcher("/api/**", "/ws-bingo/**") // solo endpoints REST + WebSocket
-				.csrf(csrf -> csrf.disable()).headers().frameOptions().disable().and()
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/h2-console/**").permitAll().requestMatchers("/ws-bingo/**").permitAll() // WebSocket abierto
-						.requestMatchers("/api/admin/**").hasRole("ADMIN")
+        http.securityMatcher("/api/**", "/ws-bingo/**") // solo endpoints REST + WebSocket
+                .csrf(csrf -> csrf.disable()).headers(headers -> headers.frameOptions().disable())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/h2-console/**").permitAll().requestMatchers("/ws-bingo/**").permitAll().requestMatchers("/api/**").permitAll() // WebSocket abierto
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-						.anyRequest().authenticated() // resto de API requiere login
-				).formLogin(login -> login.loginPage(LOGIN_URL).permitAll().loginProcessingUrl(LOGIN_PROCESSING_URL).successHandler(new AuthenticationSuccessHandler() {
-					@Override
-					public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-							throws IOException, ServletException, java.io.IOException {
-						UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-						String username = userDetails.getUsername();
-
-						usuarioService = Option.of(usuarioService).getOrElse(BeanFactory.getBean(IUsuarioService.class));
-
-						Predicate p = QUsuario.usuario.nombreusuario.eq(username);
-
-						Usuario u = usuarioService.search(p).get(0);
-						u.setFechaultimoacceso(new Date());
-						u = usuarioService.save(u);
-
-						System.out.println("El usuario " + username + " ha iniciado sesión.");
-						response.sendRedirect(LOGIN_SUCCESS_URL);
-					}
-				}).defaultSuccessUrl(LOGIN_SUCCESS_URL, true).failureUrl(LOGIN_FAILURE_URL)).logout(logout -> logout.logoutSuccessUrl(LOGOUT_SUCCESS_URL));
+                                .anyRequest().authenticated() // resto de API requiere login
+                );
 		return http.build();
 	}
 	

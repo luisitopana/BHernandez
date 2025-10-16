@@ -35,6 +35,8 @@ public class QSala extends EntityPathBase<Sala> {
 
     public final NumberPath<Integer> precio = createNumber("precio", Integer.class);
 
+    public final NumberPath<java.math.BigDecimal> premiobote = createNumber("premiobote", java.math.BigDecimal.class);
+
     public final DateTimePath<java.util.Date> timestamp = createDateTime("timestamp", java.util.Date.class);
 
     public QSala(String variable) {

@@ -133,25 +133,9 @@ public class SalaView extends VerticalLayout {
 	private void iniciarHandler(Button btnIniciar, Button btnParar, Label lEstado, Label lTiempo, Card card) {
 		Integer idSala = Integer.parseInt(btnIniciar.getId().get());
 
-		// StandardWebSocketClient client = new StandardWebSocketClient();
-
 		WebSocketStompClient stompClient = new WebSocketStompClient(new StandardWebSocketClient());
 		stompClient.setMessageConverter(new StringMessageConverter());
 		stompClient.setDefaultHeartbeat(new long[] { 0, 0 });
-		// Crear el cliente STOMP
-		// WebSocketStompClient stompClient = new WebSocketStompClient(client);
-		// stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-
-		/*
-		 * WebSocketStompClient stompClient = new WebSocketStompClient( new
-		 * SockJsClient(Collections.singletonList(new WebSocketTransport(new
-		 * StandardWebSocketClient()))) );
-		 */
-		/*
-		 * WebSocketStompClient stompClient = new WebSocketStompClient(new
-		 * StandardWebSocketClient());
-		 */
-		// stompClient.setMessageConverter(new StringMessageConverter()); // importante
 
 		StompSessionHandler sessionHandler = new StompSessionHandlerAdapter() {
 			@Override
@@ -179,7 +163,6 @@ public class SalaView extends VerticalLayout {
 
 					@Override
 					public void handleFrame(StompHeaders headers, Object payload) {
-						System.out.println("ESTADO");
 						getUI().ifPresent(ui -> ui.access(() -> {
 							SalaState estado = SalaState.valueOf(payload.toString());
 

@@ -1,6 +1,5 @@
-package com.lmh.entity;
+package com.lmh.config;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,9 +7,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.lmh.entity.Usuario;
+
 public class MyUserDetails implements UserDetails {
 	 
-    private Usuario user;
+    private static final long serialVersionUID = 2761405145279982955L;
+    
+	private Usuario user;
      
     public MyUserDetails(Usuario user) {
         this.user = user;
@@ -18,11 +21,7 @@ public class MyUserDetails implements UserDetails {
  
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-         
-        authorities.add(new SimpleGrantedAuthority(user.getNombreusuario() == "admin" ? "ADMIN" : "JUGADOR"));
-         
-        return authorities;
+        return List.of(new SimpleGrantedAuthority(user.getNombreusuario() == "admin" ? "ADMIN" : "JUGADOR"));
     }
  
     @Override

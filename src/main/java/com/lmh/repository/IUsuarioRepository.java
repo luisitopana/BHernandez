@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.lmh.entity.Usuario;
 
 @Repository
-public interface IUsuarioRepository  extends IBaseRepository<Usuario, Long>, QuerydslPredicateExecutor<Usuario> {
+public interface IUsuarioRepository  extends IBaseRepository<Usuario, Integer>, QuerydslPredicateExecutor<Usuario> {
 	public Usuario findByNombreusuario(String username);
 }

@@ -2,19 +2,16 @@ package com.lmh.entity;
 
 import java.util.Date;
 
-import org.hibernate.annotations.CurrentTimestamp;
-
 import com.lmh.manager.PartidaState;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -25,11 +22,12 @@ import jakarta.persistence.Version;
 public class Partida {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "partida_seq")
+	@SequenceGenerator(name="partida_seq", sequenceName = "seq_partida", allocationSize=1)
 	@Column(name = "idpartida")
 	private Integer idpartida;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "idsala")
 	private Sala idsala;
 
@@ -45,9 +43,6 @@ public class Partida {
 	@Column(name = "premiobingo")
 	private Integer premiobingo;
 
-	@Column(name = "premiobote")
-	private Integer premiobote;
-
 	@Column(name = "estado")
 	private PartidaState estado;
 	
@@ -55,7 +50,6 @@ public class Partida {
 	private boolean saliobote;
 
 	@Version
-	@CurrentTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "timestamp")
 	private Date timestamp;
@@ -106,14 +100,6 @@ public class Partida {
 
 	public void setPremiobingo(Integer premiobingo) {
 		this.premiobingo = premiobingo;
-	}
-
-	public Integer getPremiobote() {
-		return premiobote;
-	}
-
-	public void setPremiobote(Integer premiobote) {
-		this.premiobote = premiobote;
 	}
 
 	public PartidaState getEstado() {

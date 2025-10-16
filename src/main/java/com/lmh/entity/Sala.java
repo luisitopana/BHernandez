@@ -1,5 +1,6 @@
 package com.lmh.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.hibernate.annotations.CurrentTimestamp;
@@ -8,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -18,7 +20,8 @@ import jakarta.persistence.Version;
 public class Sala {
 	
 	@Id 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sala_seq")
+	@SequenceGenerator(name="sala_seq", sequenceName = "seq_sala", allocationSize=1)
 	private Integer idsala;
 	
 	private String codigo;
@@ -32,6 +35,8 @@ public class Sala {
 	private Integer porcentajebingo;
 	
 	private Integer porcentajebote;
+	
+	private BigDecimal premiobote;
 	
 	private Integer bolamaxbote = 44;
 	
@@ -96,6 +101,14 @@ public class Sala {
 		this.porcentajebote = porcentajebote;
 	}
 
+	public BigDecimal getPremiobote() {
+		return premiobote;
+	}
+
+	public void setPremiobote(BigDecimal premiobote) {
+		this.premiobote = premiobote;
+	}
+
 	public Integer getBolamaxbote() {
 		return bolamaxbote;
 	}
@@ -111,6 +124,4 @@ public class Sala {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-
-	
 }
