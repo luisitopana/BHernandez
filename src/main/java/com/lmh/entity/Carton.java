@@ -31,9 +31,11 @@ public class Carton {
 	@Size(min = 15, max = 4000)
 	private String numeros;
 	
-	private boolean premiadoLinea = false;
+	private boolean premiadolinea = false;
 	
-	private boolean premiadoBingo = false;
+	private boolean premiadobingo = false;
+	
+	private boolean estaenjuego = false;
 	
 	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "idpartida")
@@ -64,20 +66,20 @@ public class Carton {
 		this.numeros = numeros;
 	}
 
-	public boolean isPremiadoLinea() {
-		return premiadoLinea;
+	public boolean isPremiadolinea() {
+		return premiadolinea;
 	}
 
-	public void setPremiadoLinea(boolean premiadoLinea) {
-		this.premiadoLinea = premiadoLinea;
+	public void setPremiadolinea(boolean premiadolinea) {
+		this.premiadolinea = premiadolinea;
 	}
 
-	public boolean isPremiadoBingo() {
-		return premiadoBingo;
+	public boolean isPremiadobingo() {
+		return premiadobingo;
 	}
 
-	public void setPremiadoBingo(boolean premiadoBingo) {
-		this.premiadoBingo = premiadoBingo;
+	public void setPremiadobingo(boolean premiadobingo) {
+		this.premiadobingo = premiadobingo;
 	}
 
 	public Partida getIdpartida() {
@@ -94,6 +96,14 @@ public class Carton {
 
 	public void setIdusuario(Usuario idusuario) {
 		this.idusuario = idusuario;
+	}
+
+	public boolean isEstaenjuego() {
+		return estaenjuego;
+	}
+
+	public void setEstaenjuego(boolean estaenjuego) {
+		this.estaenjuego = estaenjuego;
 	}
 
 	public Date getTimestamp() {

@@ -19,6 +19,11 @@ import com.querydsl.core.types.Predicate;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class BaseServiceImpl<E, R> implements IBaseService<E>{
+	
+	public E load (Integer id) {
+		IBaseRepository baseRepo = getRepository();
+		return (E) baseRepo.findById(id).get();
+	}
 
 	@Override
 	public List<E> search() {

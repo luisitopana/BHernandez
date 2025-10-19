@@ -15,7 +15,7 @@ import io.vavr.control.Option;
 
 @RestController
 @RequestMapping("/api/bingo")
-public class SalaController {
+public class CartonController {
 
 	private IPatroncartonService patroncartonService;
 

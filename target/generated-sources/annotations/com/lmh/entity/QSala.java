@@ -19,11 +19,11 @@ public class QSala extends EntityPathBase<Sala> {
 
     public static final QSala sala = new QSala("sala");
 
-    public final NumberPath<Integer> bolamaxbote = createNumber("bolamaxbote", Integer.class);
-
     public final StringPath codigo = createString("codigo");
 
     public final NumberPath<Integer> idsala = createNumber("idsala", Integer.class);
+
+    public final NumberPath<Integer> maxcartones = createNumber("maxcartones", Integer.class);
 
     public final StringPath nombre = createString("nombre");
 
@@ -34,8 +34,6 @@ public class QSala extends EntityPathBase<Sala> {
     public final NumberPath<Integer> porcentajelinea = createNumber("porcentajelinea", Integer.class);
 
     public final NumberPath<Integer> precio = createNumber("precio", Integer.class);
-
-    public final NumberPath<java.math.BigDecimal> premiobote = createNumber("premiobote", java.math.BigDecimal.class);
 
     public final DateTimePath<java.util.Date> timestamp = createDateTime("timestamp", java.util.Date.class);
 

@@ -1,6 +1,5 @@
 package com.lmh.entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.hibernate.annotations.CurrentTimestamp;
@@ -36,9 +35,7 @@ public class Sala {
 	
 	private Integer porcentajebote;
 	
-	private BigDecimal premiobote;
-	
-	private Integer bolamaxbote = 44;
+	private Integer maxcartones;
 	
 	@Version
 	@CurrentTimestamp
@@ -101,20 +98,12 @@ public class Sala {
 		this.porcentajebote = porcentajebote;
 	}
 
-	public BigDecimal getPremiobote() {
-		return premiobote;
+	public Integer getMaxcartones() {
+		return maxcartones;
 	}
 
-	public void setPremiobote(BigDecimal premiobote) {
-		this.premiobote = premiobote;
-	}
-
-	public Integer getBolamaxbote() {
-		return bolamaxbote;
-	}
-
-	public void setBolamaxbote(Integer bolamaxbote) {
-		this.bolamaxbote = bolamaxbote;
+	public void setMaxcartones(Integer maxcartones) {
+		this.maxcartones = maxcartones;
 	}
 
 	public Date getTimestamp() {

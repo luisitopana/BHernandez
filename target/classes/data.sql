@@ -1,7 +1,7 @@
 
-INSERT INTO SALA (idsala, codigo, nombre, precio, porcentajelinea, porcentajebingo, porcentajebote, premiobote, BOLAMAXBOTE, TIMESTAMP) VALUES (SEQ_SALA.NEXTVAL, 'SALA_SALAMANCA', 'SALAMANCA', 10, 10, 60, 30, 0, 44, SYSDATE);
+INSERT INTO SALA (idsala, codigo, nombre, precio, porcentajelinea, porcentajebingo, porcentajebote, MAXCARTONES, TIMESTAMP) VALUES (SEQ_SALA.NEXTVAL, 'SALA_SALAMANCA', 'SALAMANCA', 10, 10, 60, 30, 10, SYSDATE);
 
-INSERT INTO SALA (idsala, codigo, nombre, precio, porcentajelinea, porcentajebingo, porcentajebote, premiobote, BOLAMAXBOTE, TIMESTAMP) VALUES (SEQ_SALA.NEXTVAL, 'SALA_AVILA', 'AVILA', 10, 10, 60, 30, 0, 44, SYSDATE);
+INSERT INTO SALA (idsala, codigo, nombre, precio, porcentajelinea, porcentajebingo, porcentajebote, MAXCARTONES, TIMESTAMP) VALUES (SEQ_SALA.NEXTVAL, 'SALA_AVILA', 'AVILA', 10, 10, 60, 30, 20, SYSDATE);
 
 --INSERT INTO SALA (idsala, codigo, nombre, precio, porcentajelinea, porcentajebingo, porcentajebote, BOLAMAXBOTE, TIMESTAMP) VALUES (SEQ_SALA.NEXTVAL, 'Sala_2', 'Sala nombre 2', 20, 10, 60, 30, 44, SYSDATE);
 

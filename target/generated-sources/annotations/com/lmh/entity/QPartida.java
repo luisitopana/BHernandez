@@ -22,6 +22,8 @@ public class QPartida extends EntityPathBase<Partida> {
 
     public static final QPartida partida = new QPartida("partida");
 
+    public final NumberPath<Integer> bolamaxbote = createNumber("bolamaxbote", Integer.class);
+
     public final EnumPath<com.lmh.manager.PartidaState> estado = createEnum("estado", com.lmh.manager.PartidaState.class);
 
     public final DateTimePath<java.util.Date> fechafin = createDateTime("fechafin", java.util.Date.class);
@@ -33,6 +35,8 @@ public class QPartida extends EntityPathBase<Partida> {
     public final QSala idsala;
 
     public final NumberPath<Integer> premiobingo = createNumber("premiobingo", Integer.class);
+
+    public final NumberPath<java.math.BigDecimal> premiobote = createNumber("premiobote", java.math.BigDecimal.class);
 
     public final NumberPath<Integer> premiolinea = createNumber("premiolinea", Integer.class);
 

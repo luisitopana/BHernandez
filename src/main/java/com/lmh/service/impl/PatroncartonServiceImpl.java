@@ -5,48 +5,90 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lmh.entity.Carton;
+import com.lmh.entity.Partida;
 import com.lmh.entity.Patroncarton;
+import com.lmh.entity.QCarton;
 import com.lmh.entity.QPatroncarton;
+import com.lmh.entity.Usuario;
 import com.lmh.repository.IPatroncartonRepository;
+import com.lmh.service.ICartonService;
+import com.lmh.service.IPartidaService;
 import com.lmh.service.IPatroncartonService;
+import com.lmh.service.IUsuarioService;
+import com.lmh.utils.BeanFactory;
 import com.lmh.utils.CrearCarton;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
+
+import io.vavr.control.Option;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class PatroncartonServiceImpl extends BaseServiceImpl<Patroncarton, IPatroncartonRepository> implements IPatroncartonService {
+	
+	private ICartonService cartonService;
+	
+	private IPartidaService partidaService;
+	
+	private IUsuarioService usuarioService;
 
 	public String generarCartones(int idusuario, int numeroCartones, int idpartida) {
 		Random r = new Random();
-		
 		List<Patroncarton> patroncartons = new ArrayList<>();
 		
 		int totalPatrones = super.search().size();
-		
 		int ale;
 		
-		for (int i = 0; i < 4; i++) {			
-			do {
-				ale = r.nextInt(totalPatrones) + 1;
-			} while(ale%6 != 1 || ale > totalPatrones - 6);
+		for (int i = 0; i < numeroCartones; i++) {
+			ale = r.nextInt(totalPatrones) + 1;
 			
-			List<Integer> idsPatron = IntStream.rangeClosed(ale, ale + 5).boxed().toList();
-			
-			patroncartons.addAll(super.search(QPatroncarton.patroncarton.idpatroncarton.in(idsPatron)));
+			patroncartons.addAll(super.search(QPatroncarton.patroncarton.idpatroncarton.eq(ale)));
 		}
 		
 		try {
-			return CrearCarton.getInstance().rellenarCarton(transformarArray(patroncartons));
+			LinkedList<Carton> cartones = CrearCarton.getInstance().rellenarCarton(transformarArray(patroncartons));
+			
+			LinkedList<String> cartonesEnJuego = new LinkedList<>();
+			
+			Partida p = getPartidaService().load(idpartida);
+			Usuario u = getUsuarioService().load(idusuario);
+			
+			for (Carton carton : cartones) {
+				carton.setIdpartida(p);
+				carton.setIdusuario(u);
+				carton.setPremiadobingo(false);
+				carton.setPremiadolinea(false);
+				carton.setEstaenjuego(numeroCartones > 0);
+				
+				getCartonService().save(carton);
+				
+				cartonesEnJuego.add(carton.getNumeros());
+			}
+			
+			ObjectMapper mapper = new ObjectMapper();
+	        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cartonesEnJuego);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	private List<Carton> cargarCartones(Integer idUsuario, Integer idPartida) {
+		Predicate p = QCarton.carton.idusuario.idusuario.eq(idUsuario)
+				.and(QCarton.carton.idpartida.idpartida.eq(idPartida));
+		
+		OrderSpecifier o = QCarton.carton.idcarton.asc();
+		
+		return getCartonService().search(p, o);
+				
 	}
 	
 	private LinkedList<int[][]> transformarArray(List<Patroncarton> patroncartons) {
@@ -91,17 +133,18 @@ public class PatroncartonServiceImpl extends BaseServiceImpl<Patroncarton, IPatr
         return resultado;
 	}
 	
-	public static void mostrarSerie(List<int[][]> serie) {
-		int n = 1;
-		for (int[][] carton : serie) {
-			System.out.println("Cartón " + n++);
-			for (int[] fila : carton) {
-				for (int num : fila) {
-					System.out.print((num == 0 ? "  " : String.format("%2d", num)) + " ");
-				}
-				System.out.println();
-			}
-			System.out.println("---------------------------------");
-		}
+	private ICartonService getCartonService() {
+		cartonService = Option.of(cartonService).getOrElse(BeanFactory.getBean(ICartonService.class));
+		return cartonService;
+	}
+	
+	private IPartidaService getPartidaService() {
+		partidaService = Option.of(partidaService).getOrElse(BeanFactory.getBean(IPartidaService.class));
+		return partidaService;
+	}
+	
+	private IUsuarioService getUsuarioService() {
+		usuarioService = Option.of(usuarioService).getOrElse(BeanFactory.getBean(IUsuarioService.class));
+		return usuarioService;
 	}
 }

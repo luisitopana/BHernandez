@@ -21,7 +21,6 @@ import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import com.google.gson.Gson;
 import com.lmh.entity.Partida;
 import com.lmh.entity.Sala;
 import com.lmh.service.IPartidaService;
@@ -65,7 +64,7 @@ public class SalaRuntime {
 	}
 	
 	private void enviarDatosSala() {
-		datosExecutor = Executors.newSingleThreadScheduledExecutor();
+		/*datosExecutor = Executors.newSingleThreadScheduledExecutor();
 		
 		datosExecutor.scheduleAtFixedRate(() -> {
             if (!activa) {
@@ -76,7 +75,7 @@ public class SalaRuntime {
             Gson g = new Gson();
             String datosSala = g.toJson(sala);
             messagingTemplate.convertAndSend("/topic/sala/" + sala.getIdsala() + "/datos", datosSala);
-        }, 0, 2, TimeUnit.SECONDS);
+        }, 0, 2, TimeUnit.SECONDS);*/
 	}
 
 	public void iniciarCuentaAtras() {

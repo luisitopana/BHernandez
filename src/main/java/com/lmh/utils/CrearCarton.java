@@ -7,9 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lmh.entity.Carton;
 
 public final class CrearCarton {
 
@@ -22,13 +23,13 @@ public final class CrearCarton {
 		return instance;
 	}
 
-	public synchronized String rellenarCarton(LinkedList<int[][]> cartonesVacios) throws JsonProcessingException {
+	public synchronized LinkedList<Carton> rellenarCarton(LinkedList<int[][]> cartonesVacios) throws JsonProcessingException {
 		Random rand = new Random();
 
 		List<int[][]> cartones = new ArrayList<>();
 		List<List<Integer>> columnas = new ArrayList<>();
 		
-		for (int x = 0; x < cartonesVacios.size() / 6; x++) {
+		for (int x = 0; x < cartonesVacios.size(); x++) {
 			columnas.clear();
 
 			for (int i = 0; i < 9; i++) {
@@ -45,12 +46,12 @@ public final class CrearCarton {
 				
 				for (int j = 0; j < 3; j++) {
 					for (int k = 0; k < 6; k++) {
-						int[][] carton = cartonesVacios.get(x * 6 + k);
+						int[][] carton = cartonesVacios.get(x);
 						
 						if(carton[j][i] == 1) {
 							try {
 								carton[j][i] = disponibles.poll();
-								cartonesVacios.set(x * 6 + k, carton);
+								cartonesVacios.set(x, carton);
 							}catch (Exception e) {
 							}
 							
@@ -79,8 +80,28 @@ public final class CrearCarton {
 		ordenarCartones(cartonesVacios);
 		mostrarSerie(cartonesVacios);
 		
-		ObjectMapper mapper = new ObjectMapper();
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cartonesVacios);
+		//ObjectMapper mapper = new ObjectMapper();
+		//mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cartonesVacios);
+        return transformarArrayACarton(cartonesVacios); 
+	}
+	
+	private static LinkedList<Carton> transformarArrayACarton(List<int[][]> listaCartones) {
+		LinkedList<Carton> cartones = new LinkedList<>();
+		
+		for (int[][] carton : listaCartones) {
+			Carton c = new Carton();
+			String numero = "";
+			
+			String resultado = Arrays.stream(carton)
+				    .flatMapToInt(Arrays::stream)
+				    .mapToObj(String::valueOf)
+				    .collect(Collectors.joining(","));
+			
+			c.setNumeros(resultado);
+			cartones.add(c);
+		}
+		
+		return cartones;
 	}
 
 	public static void mostrarSerie(List<int[][]> serie) {

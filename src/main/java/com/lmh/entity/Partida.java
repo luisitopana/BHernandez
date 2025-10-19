@@ -1,5 +1,6 @@
 package com.lmh.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.lmh.manager.PartidaState;
@@ -48,6 +49,10 @@ public class Partida {
 	
 	@Column(name = "saliobote")
 	private boolean saliobote;
+	
+	private BigDecimal premiobote;
+	
+	private Integer bolamaxbote;
 
 	@Version
 	@Temporal(TemporalType.TIMESTAMP)
@@ -116,6 +121,22 @@ public class Partida {
 
 	public void setSaliobote(boolean saliobote) {
 		this.saliobote = saliobote;
+	}
+	
+	public BigDecimal getPremiobote() {
+		return premiobote;
+	}
+
+	public void setPremiobote(BigDecimal premiobote) {
+		this.premiobote = premiobote;
+	}
+
+	public Integer getBolamaxbote() {
+		return bolamaxbote;
+	}
+
+	public void setBolamaxbote(Integer bolamaxbote) {
+		this.bolamaxbote = bolamaxbote;
 	}
 
 	public Date getTimestamp() {

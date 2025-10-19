@@ -22,6 +22,8 @@ public class QCarton extends EntityPathBase<Carton> {
 
     public static final QCarton carton = new QCarton("carton");
 
+    public final BooleanPath estaenjuego = createBoolean("estaenjuego");
+
     public final NumberPath<Integer> idcarton = createNumber("idcarton", Integer.class);
 
     public final QPartida idpartida;
@@ -30,9 +32,9 @@ public class QCarton extends EntityPathBase<Carton> {
 
     public final StringPath numeros = createString("numeros");
 
-    public final BooleanPath premiadoBingo = createBoolean("premiadoBingo");
+    public final BooleanPath premiadobingo = createBoolean("premiadobingo");
 
-    public final BooleanPath premiadoLinea = createBoolean("premiadoLinea");
+    public final BooleanPath premiadolinea = createBoolean("premiadolinea");
 
     public final DateTimePath<java.util.Date> timestamp = createDateTime("timestamp", java.util.Date.class);
 
